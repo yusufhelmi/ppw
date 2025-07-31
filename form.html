@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laporan Kehilangan Barang</title>
+    
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #cbcccc;
+            padding: 20px;
+        }
+        
+        .container.form {
+            max-width: 800px;
+            margin: 10px auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #333;
+        }
+
+        .mb-3 {
+            margin-bottom: 1rem !important;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .form-control {
+            justify-self: center;
+            display: block;
+            width: 97%;
+            padding: 0.375rem 0.75rem;
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #495057;
+            background-color: #fff;
+            background-clip: padding-box;
+            border: 1px solid #ced4da;
+            border-radius: 0.25rem;
+            transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+        
+        .form-control:focus {
+            color: #495057;
+            background-color: #fff;
+            border-color: #80bdff;
+            outline: 0;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        .form-check {
+            position: relative;
+            display: block;
+            min-height: 1.5rem;
+            padding-left: 1.5rem;
+            margin-bottom: 0.125rem;
+        }
+
+        .form-check-input {
+            position: absolute;
+            margin-top: 0.3rem;
+            margin-left: -1.5rem;
+        }
+
+        .form-check-label {
+            margin-bottom: 0;
+        }
+
+        .btn-submit {
+            display: block;
+            width: 100%;
+            padding: 0.5rem;
+            font-size: 1.2rem;
+            font-weight: 400;
+            text-align: center;
+            color: #fff;
+            background-color: #1abc9c;
+            border: none;
+            border-radius: 0.25rem;
+            cursor: pointer;
+        }
+        
+        .btn-submit:hover {
+            background-color: #08483c;
+        }
+
+        textarea.form-control {
+            min-height: 100px;
+        }
+
+        #otherInput {
+            display: none;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container form">
+        <h1>Laporan Kehilangan Barang</h1>
+
+        <form id="laporanForm">
+            <div class="mb-3">
+                <label for="namaLengkap" class="form-label">Nama Lengkap:</label>
+                <input type="text" class="form-control" id="namaLengkap" placeholder="Masukkan nama lengkap" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="alamat" class="form-label">Alamat:</label>
+                <textarea class="form-control" id="alamat" rows="3" placeholder="Masukkan alamat lengkap" required></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Barang yang Hilang:</label>
+                <div id="barangHilangChecklist">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="ktpCheck">
+                        <label class="form-check-label" for="ktpCheck">KTP</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="simCheck">
+                        <label class="form-check-label" for="simCheck">SIM</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="stnkCheck">
+                        <label class="form-check-label" for="stnkCheck">STNK</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="atmCheck">
+                        <label class="form-check-label" for="atmCheck">Kartu ATM</label>
+                    </div>
+                    
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="otherCheck">
+                        <label class="form-check-label" for="otherCheck">Barang Lainnya:</label>
+                        <input type="text" class="form-control" id="otherInput" placeholder="Masukkan nama barang lainnya">
+                    </div>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="waktuKehilangan" class="form-label">Waktu Kehilangan:</label>
+                <input type="datetime-local" class="form-control" id="waktuKehilangan" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="detailKehilangan" class="form-label">Detail Kehilangan:</label>
+                <textarea class="form-control" id="detailKehilangan" rows="5" placeholder="Contoh: Dompet jatuh di angkot rute Blok M - Kota sekitar pukul 18.00 WIB" required></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label for="uploadBukti" class="form-label">Upload Bukti/Foto Barang:</label>
+                <input type="file" class="form-control" id="uploadBukti">
+            </div>
+
+            <button type="submit" class="btn-submit">
+                Kirim Laporan
+            </button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const laporanForm = document.getElementById('laporanForm');
+            const namaInput = document.getElementById('namaLengkap');
+            const alamatInput = document.getElementById('alamat');
+            const waktuInput = document.getElementById('waktuKehilangan');
+            const detailInput = document.getElementById('detailKehilangan');
+            const uploadInput = document.getElementById('uploadBukti');
+            
+            const otherCheck = document.getElementById('otherCheck');
+            const otherInput = document.getElementById('otherInput');
+            const barangHilangChecklist = document.getElementById('barangHilangChecklist');
+
+            const showSuccessPopupAndRedirect = () => {
+                const popup = document.createElement('div');
+                popup.textContent = 'Laporan anda akan segera diproses';
+                
+                popup.style.cssText = `
+                    position: fixed; 
+                    top: 50%; 
+                    left: 50%; 
+                    transform: translate(-50%, -50%); 
+                    background-color: #1abc9c; 
+                    color: white; 
+                    padding: 20px 40px; 
+                    border-radius: 5px; 
+                    z-index: 1000; 
+                    box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+                    font-size: 1.2rem;
+                    text-align: center;
+                `;
+
+                document.body.appendChild(popup);
+
+                setTimeout(() => {
+                    document.body.removeChild(popup);
+                    window.location.href = '../setelah-login/index.html';
+                }, 1500); 
+            };
+
+            const validateForm = () => {
+                let isValid = true;
+                let errorMessage = '';
+                
+                if (namaInput.value.trim() === '') {
+                    errorMessage += 'Nama lengkap harus diisi.\n';
+                    isValid = false;
+                }
+
+                if (alamatInput.value.trim() === '') {
+                    errorMessage += 'Alamat harus diisi.\n';
+                    isValid = false;
+                }
+
+                if (waktuInput.value.trim() === '') {
+                    errorMessage += 'Waktu kehilangan harus diisi.\n';
+                    isValid = false;
+                }
+
+                if (detailInput.value.trim() === '') {
+                    errorMessage += 'Detail kehilangan harus diisi.\n';
+                    isValid = false;
+                }
+
+                const checkboxes = barangHilangChecklist.querySelectorAll('input[type="checkbox"]');
+                let isItemChecked = false;
+                for (const checkbox of checkboxes) {
+                    if (checkbox.checked) {
+                        isItemChecked = true;
+                        break;
+                    }
+                }
+
+                if (otherCheck.checked && otherInput.value.trim() === '') {
+                    errorMessage += 'Nama barang lainnya harus diisi jika dicentang "Barang Lainnya".\n';
+                    isValid = false;
+                }
+                
+                if (!isItemChecked) {
+                    errorMessage += 'Setidaknya satu barang hilang harus dipilih.\n';
+                    isValid = false;
+                }
+
+                if (!isValid) {
+                    alert('Formulir tidak lengkap atau ada kesalahan:\n\n' + errorMessage);
+                }
+
+                return isValid;
+            };
+
+            laporanForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+
+                if (validateForm()) {
+                    showSuccessPopupAndRedirect();
+                } else {
+                    console.log('Validasi formulir gagal.');
+                }
+            });
+
+            if (otherCheck && otherInput) {
+                otherCheck.addEventListener('change', function() {
+                    if (this.checked) {
+                        otherInput.style.display = 'block';
+                        otherInput.required = true;
+                    } else {
+                        otherInput.style.display = 'none';
+                        otherInput.required = false;
+                        otherInput.value = ''; 
+                    }
+                });
+            }
+        });
+    </script>
+
+</body>
+</html>

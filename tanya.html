@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bantuan & Pertanyaan</title>
+    
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #c1c1c1;
+            padding: 20px;
+        }
+
+        .container.form {
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 100px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .logo-container h1 {
+            color: #4A4A4A;
+            font-size: 3.5rem;
+            margin: 0;
+            font-weight: bold;
+        }
+
+        h2 {
+            text-align: center;
+            color: #007bff;
+            margin-bottom: 30px;
+            font-size: 2rem;
+        }
+
+        .mb-3 {
+            margin-bottom: 1rem !important;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 2.5rem;
+            font-weight: 500;
+            font-size: 1.3rem;
+        }
+
+        .form-control {
+            justify-self: center;
+            display: block;
+            width: 100%;
+            padding: 0.75rem 1rem;
+            font-size: 1.4rem;
+            line-height: 1.5;
+            color: #495057;
+            background-color: #fff;
+            border: 1px solid #ced4da;
+            border-radius: 0.25rem;
+        }
+
+        .form-control:focus {
+            border-color: #80bdff;
+            outline: 0;
+            box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-check {
+            position: relative;
+            display: block;
+            min-height: 1.5rem;
+            padding-left: 1.5rem;
+            margin-bottom: 0.5rem;
+            font-size: 1.3rem;
+        }
+
+        .form-check-input {
+            position: absolute;
+            margin-top: 0.3rem;
+            margin-left: -1.5rem;
+        }
+
+        .form-check-label {
+            margin-bottom: 0;
+        }
+
+        #otherInput {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .btn-primary {
+            display: block;
+            width: 100%;
+            padding: 0.75rem;
+            font-size: 1.4rem;
+            font-weight: 400;
+            text-align: center;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        /* Error message styling */
+        .error-message {
+            color: #dc3545;
+            font-size: 0.875rem;
+            display: block;
+            margin-top: 0.25rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container form">
+        <div class="logo-container">
+            <h1>UrusBeres.id</h1>
+        </div>
+        <h2>Masih bingung?</h2>
+
+        <form id="helpForm">
+            
+            <div class="mb-3">
+                <label class="form-label">Kategori Barang yang Hilang :</label>
+                <div id="kategoriChecklist">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="ktpCheck">
+                        <label class="form-check-label" for="ktpCheck">KTP</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="simCheck">
+                        <label class="form-check-label" for="simCheck">SIM</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="stnkCheck">
+                        <label class="form-check-label" for="stnkCheck">STNK</label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="atmCheck">
+                        <label class="form-check-label" for="atmCheck">Kartu ATM</label>
+                    </div>
+                    
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="otherCheck">
+                        <label class="form-check-label" for="otherCheck">Barang Lainnya</label>
+                    </div>
+                </div>
+                <input type="text" class="form-control" id="otherInput" placeholder="Masukkan nama barang lainnya">
+                <span class="error-message" id="error-checklist"></span>
+            </div>
+
+            <div class="mb-3">
+                <label for="question" class="form-label">Kolom Pertanyaan:</label>
+                <textarea class="form-control" id="question" placeholder="Jelaskan pertanyaan Anda di sini"></textarea>
+                <span class="error-message" id="error-question"></span>
+            </div>
+
+            <button type="submit" class="btn btn-primary">SUBMIT</button>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.getElementById('helpForm');
+            const otherCheck = document.getElementById('otherCheck');
+            const otherInput = document.getElementById('otherInput');
+            const questionInput = document.getElementById('question');
+            const checklistContainer = document.getElementById('kategoriChecklist');
+
+            const errorChecklist = document.getElementById('error-checklist');
+            const errorQuestion = document.getElementById('error-question');
+
+            // Kalo salah biar nongol
+            const setError = (errorSpan, message) => {
+                errorSpan.textContent = message;
+            };
+
+            // klo bener ilang peringatannya
+            const clearError = (errorSpan) => {
+                errorSpan.textContent = '';
+            };
+
+            // biar input barang manual gk keliatan
+            otherCheck.addEventListener('change', function() {
+                if (this.checked) {
+                    otherInput.style.display = 'block';
+                    otherInput.required = true;
+                } else {
+                    otherInput.style.display = 'none';
+                    otherInput.required = false;
+                    otherInput.value = ''; 
+                }
+            });
+
+            form.addEventListener('submit', (event) => {
+                event.preventDefault();
+
+                let isValid = true;
+                
+                clearError(errorChecklist);
+                clearError(errorQuestion);
+
+                const checkboxes = checklistContainer.querySelectorAll('input[type="checkbox"]');
+                let isChecked = false;
+                
+                for (const checkbox of checkboxes) {
+                    if (checkbox.checked) {
+                        isChecked = true;
+                        break;
+                    }
+                }
+
+                if (otherCheck.checked && otherInput.value.trim() === '') {
+                    setError(errorChecklist, 'Nama barang lainnya harus diisi.');
+                    isValid = false;
+                } else if (!isChecked) {
+
+                    setError(errorChecklist, 'Pilih setidaknya satu kategori barang.');
+                    isValid = false;
+                }
+
+                if (questionInput.value.trim() === '') {
+                    setError(errorQuestion, 'Kolom pertanyaan harus diisi.');
+                    isValid = false;
+                }
+
+                if (isValid) {
+                    window.alert("Pertanyaanmu kami terima, tunggu jawaban lewat email yaa");
+                    window.location.href = '../setelah-login/index.html';
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
